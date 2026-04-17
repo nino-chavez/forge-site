@@ -1,0 +1,4 @@
+strategy: solo
+depth: standard
+set_by: manual
+rationale: "forge-site v1 is a documentation/knowledge project, not a multi-domain app. Single agent writes archetype definitions, module docs, playbook, and spec templates. No database, API, or UI layers to split across specialists."

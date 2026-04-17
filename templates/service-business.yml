@@ -1,0 +1,161 @@
+# forge-site Spec Template: Service Business
+# Usage: Copy to new project's specchain/specs/ and customize
+
+archetype: service-business
+name: "[CLIENT] Service Business Site"
+description: "Professional web presence for [CLIENT] — lead generation, trust building, service showcase"
+
+defaults:
+  framework: next
+  database: none        # Sanity handles all content
+  cms: sanity
+  auth: none            # No user accounts needed
+  payments: none        # Revenue comes from services, not the site
+  email: resend
+  analytics: vercel
+  deployment: vercel
+
+recon_questions:
+  - "What services do you offer? List your top 3-5."
+  - "How many locations do you have? Addresses?"
+  - "How many team members should be on the site?"
+  - "What is your service area? (cities, radius)"
+  - "Do you take appointments? How are they currently booked?"
+  - "Do you have testimonials or reviews? Where?"
+  - "What do customers ask most before hiring you?"
+  - "Do you have existing photos of your work or team?"
+  - "What's your current website URL (if any)?"
+  - "Who will update the site content after launch?"
+
+required_modules:
+  - cms-sanity
+  - email-resend
+  - contact-forms
+  - seo-structured-data
+  - analytics-vercel
+
+recommended_modules:
+  - booking-calcom      # if appointment-based
+
+optional_modules:
+  - analytics-posthog   # if conversion tracking needed
+
+sitemap:
+  - path: "/"
+    purpose: "Homepage — hero, services overview, trust signals, testimonials, FAQ"
+  - path: "/services"
+    purpose: "Services listing"
+  - path: "/services/[slug]"
+    purpose: "Service detail — directAnswer, process, FAQ"
+  - path: "/team"
+    purpose: "Team/staff grid"
+  - path: "/team/[slug]"
+    purpose: "Individual profile (credentials, specialties)"
+  - path: "/about"
+    purpose: "Company story"
+  - path: "/contact"
+    purpose: "Contact form"
+  - path: "/estimate"
+    purpose: "Estimate request form (if project-based service)"
+    condition: "if project-scoping needed"
+  - path: "/projects"
+    purpose: "Portfolio/gallery (if visual work)"
+    condition: "if project-centric variant"
+  - path: "/areas"
+    purpose: "Service area pages (geo-targeted SEO)"
+    condition: "if local SEO matters"
+  - path: "/areas/[slug]"
+    purpose: "Area-specific content"
+    condition: "if local SEO matters"
+  - path: "/blog"
+    purpose: "Blog (if client will write)"
+    condition: "only if client commits to content"
+  - path: "/reviews"
+    purpose: "Testimonials page"
+  - path: "/privacy-policy"
+    purpose: "Legal"
+  - path: "/terms-of-service"
+    purpose: "Legal"
+  - path: "/api/contact"
+    purpose: "POST — contact form submission → email"
+  - path: "/api/estimate"
+    purpose: "POST — estimate request → email"
+    condition: "if estimate form exists"
+
+task_groups:
+  - name: "Project Setup"
+    tasks:
+      - "Scaffold Next.js 16 project with App Router"
+      - "Install Tailwind CSS 4, configure design tokens from brand-forge"
+      - "Link to Vercel project"
+      - "Set up Sanity project"
+
+  - name: "CMS & Content"
+    module: cms-sanity
+    tasks:
+      - "Define Sanity schemas: service, teamMember, location, testimonial, faq, siteSettings, seo (object)"
+      - "Configure Sanity Studio at /studio"
+      - "Create GROQ queries for all content types"
+      - "Seed initial content from client materials"
+
+  - name: "Core Pages"
+    tasks:
+      - "Build homepage (hero, services grid, testimonials, FAQ, CTA)"
+      - "Build /services listing (from Sanity)"
+      - "Build /services/[slug] detail (directAnswer, process, FAQ)"
+      - "Build /team listing"
+      - "Build /team/[slug] detail (credentials, specialties, booking link)"
+      - "Build /about page"
+      - "Build /reviews page"
+
+  - name: "Forms & Email"
+    module: contact-forms
+    tasks:
+      - "Create contact form with Zod validation"
+      - "Create /api/contact endpoint with Resend integration"
+      - "Create estimate form (if project-based)"
+      - "Create /api/estimate endpoint (if needed)"
+      - "Implement Resend graceful degradation for dev mode"
+      - "Test email delivery"
+
+  - name: "SEO & Structured Data"
+    module: seo-structured-data
+    tasks:
+      - "Add Organization JSON-LD to root layout"
+      - "Add LocalBusiness JSON-LD to homepage + location pages"
+      - "Add Service JSON-LD to service detail pages"
+      - "Add FAQPage JSON-LD to pages with FAQs"
+      - "Add Person JSON-LD to team detail pages"
+      - "Add BreadcrumbList to all pages"
+      - "Configure OpenGraph and Twitter Card metadata"
+      - "Generate sitemap.xml from static + dynamic routes"
+      - "Create robots.txt"
+      - "Add directAnswer field to service schemas for AEO"
+
+  - name: "Service Area SEO"
+    condition: "if local SEO matters"
+    tasks:
+      - "Create serviceArea schema in Sanity"
+      - "Build /areas listing page"
+      - "Build /areas/[slug] with area-specific content + local project count"
+
+  - name: "Polish & Launch"
+    tasks:
+      - "Run brand-forge for brand identity"
+      - "Run signal-forge for site copy"
+      - "Run image-gen for hero image and OG card"
+      - "Install @vercel/analytics and @vercel/speed-insights"
+      - "Run Lighthouse audit (target: >80 perf, >90 a11y)"
+      - "Test mobile responsiveness"
+      - "Deploy preview → client review → deploy production"
+      - "Configure custom domain"
+      - "Run claude-docs-toolkit for handoff docs"
+
+verification:
+  - "All services display from Sanity with correct ordering"
+  - "Contact form submits and email is received"
+  - "All JSON-LD validates (use Google Rich Results Test)"
+  - "Sitemap includes all static and dynamic routes"
+  - "Mobile responsive on all pages"
+  - "Lighthouse performance >80, accessibility >90"
+  - "Client can edit content in Sanity Studio"

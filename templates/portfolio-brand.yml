@@ -1,0 +1,161 @@
+# forge-site Spec Template: Portfolio/Brand
+# Usage: Copy to new project's specchain/specs/ and customize
+
+archetype: portfolio-brand
+name: "[CLIENT] Portfolio Site"
+description: "Brand presence and work showcase for [CLIENT]"
+
+defaults:
+  framework: sveltekit  # or astro for static-first
+  database: supabase    # if large media collection
+  cms: sanity           # if non-technical editor, else markdown
+  auth: none
+  payments: none
+  email: resend         # if contact form
+  analytics: vercel
+  deployment: vercel
+
+recon_questions:
+  - "Is this a personal brand or a business brand?"
+  - "What work do you showcase? (photos, projects, case studies, writing)"
+  - "How many portfolio items? (<20 = simple, 20-100 = moderate, 100+ = needs search/filtering)"
+  - "Do you take bookings or consultations?"
+  - "Do you need a blog or writing section?"
+  - "Who will update the portfolio after launch?"
+  - "How important is visual design quality? (Is the site itself a portfolio piece?)"
+  - "Do you need a media kit or brand guidelines page?"
+  - "Do you have a preferred visual style or existing brand identity?"
+  - "What should someone do after visiting? (book, inquire, hire, follow)"
+
+required_modules:
+  - analytics-vercel
+  - seo-structured-data
+
+recommended_modules:
+  - booking-calcom      # if taking bookings
+  - contact-forms       # if accepting inquiries
+  - email-resend        # if contact form
+  - cms-sanity          # if non-developer updates
+
+optional_modules:
+  - analytics-posthog
+
+image_delivery:
+  small_collection: "Static files or Sanity image CDN"
+  large_collection: "Cloudflare Images with named variants (thumbnail, grid, medium, large)"
+  pattern: "srcset with 400w/800w/1600w for responsive loading"
+
+sitemap:
+  - path: "/"
+    purpose: "Homepage — hero, gallery preview, about teaser, CTA"
+  - path: "/about"
+    purpose: "About page — bio, credentials, story"
+  - path: "/work"
+    purpose: "Portfolio / gallery / case studies"
+  - path: "/work/[slug]"
+    purpose: "Individual project or gallery detail"
+  - path: "/blog"
+    purpose: "Writing / articles"
+    condition: "if blogging"
+  - path: "/blog/[slug]"
+    purpose: "Article detail"
+    condition: "if blogging"
+  - path: "/now"
+    purpose: "Current focus page"
+    condition: "if personal brand"
+  - path: "/contact"
+    purpose: "Contact form or booking link"
+  - path: "/links"
+    purpose: "Social links directory"
+    condition: "if multi-platform presence"
+  - path: "/brand"
+    purpose: "Brand guidelines / media kit"
+    condition: "if media brand"
+  - path: "/privacy"
+    purpose: "Privacy policy"
+  - path: "/api/person.json"
+    purpose: "AEO endpoint — structured person data for AI"
+    condition: "if consultant/freelancer"
+  - path: "/api/expertise.json"
+    purpose: "AEO endpoint — structured skills/experience"
+    condition: "if consultant/freelancer"
+  - path: "/api/contact.json"
+    purpose: "AEO endpoint — contact and availability"
+    condition: "if consultant/freelancer"
+
+task_groups:
+  - name: "Project Setup"
+    tasks:
+      - "Scaffold SvelteKit 2 (or Astro) project"
+      - "Install Tailwind CSS 4, configure design tokens from brand-forge"
+      - "Link to Vercel project"
+      - "Set up content source (Sanity, markdown, or Supabase)"
+
+  - name: "Brand & Design System"
+    tasks:
+      - "Run brand-forge for color palette, typography, spacing"
+      - "Implement custom CSS variables and Tailwind config"
+      - "Create reusable layout components (header, footer, section wrappers)"
+      - "Implement animation system (entrance, hover, scroll — respect prefers-reduced-motion)"
+
+  - name: "Core Pages"
+    tasks:
+      - "Build homepage with hero, gallery preview, about teaser"
+      - "Build /about page with bio and credentials"
+      - "Build /work listing page"
+      - "Build /work/[slug] detail page"
+      - "Build /contact page (form or booking embed)"
+
+  - name: "Gallery / Portfolio"
+    condition: "if large media collection"
+    tasks:
+      - "Set up image storage (Cloudflare Images or Supabase + CF)"
+      - "Build responsive image component with srcset variants"
+      - "Build gallery grid with lazy loading"
+      - "Build lightbox with zoom, pan, keyboard navigation"
+      - "Implement filtering (by category, date, or tag)"
+
+  - name: "AEO Endpoints"
+    condition: "if consultant/freelancer"
+    tasks:
+      - "Create /api/person.json with Schema.org Person data"
+      - "Create /api/expertise.json with ItemList of skills"
+      - "Create /api/contact.json with ContactPoint data"
+      - "Set Content-Type: application/ld+json, CORS headers, cache headers"
+
+  - name: "Booking Integration"
+    module: booking-calcom
+    condition: "if taking bookings"
+    tasks:
+      - "Create /api/cal/availability endpoint"
+      - "Build ambient availability indicator (Now Booking / Limited)"
+      - "Add booking CTA linking to Cal.com event page"
+
+  - name: "SEO & Structured Data"
+    module: seo-structured-data
+    tasks:
+      - "Add Person JSON-LD to root layout"
+      - "Add WebSite JSON-LD"
+      - "Configure OpenGraph and Twitter Card metadata"
+      - "Generate sitemap.xml"
+      - "Create robots.txt"
+
+  - name: "Polish & Launch"
+    tasks:
+      - "Run signal-forge for site copy"
+      - "Run image-gen for hero image and OG card"
+      - "Install @vercel/analytics and @vercel/speed-insights"
+      - "Performance audit: lazy loading, cache headers, conditional component loading"
+      - "Lighthouse audit (target: >90 perf for portfolio, >90 a11y)"
+      - "Test mobile responsiveness"
+      - "Deploy preview → client review → deploy production"
+      - "Run claude-docs-toolkit for handoff docs"
+
+verification:
+  - "Portfolio items display with correct responsive images"
+  - "Lightbox works with keyboard navigation"
+  - "AEO endpoints return valid JSON-LD (if applicable)"
+  - "Booking availability shows correct status (if applicable)"
+  - "Contact form submits and email received (if applicable)"
+  - "Lighthouse performance >90, accessibility >90"
+  - "Design quality reflects the brand (this IS the portfolio)"

@@ -1,0 +1,146 @@
+# forge-site Spec Template: Event Organizer
+# Usage: Copy to new project's specchain/specs/ and customize
+
+archetype: event-organizer
+name: "[CLIENT] Event Site"
+description: "Event listing, registration, results, and community for [CLIENT]"
+
+defaults:
+  framework: sveltekit
+  database: supabase    # for live data if needed
+  cms: sanity           # for event content, blog, gallery
+  auth: none            # unless direct registration
+  payments: none        # often external (Venmo, Zelle, external link)
+  email: resend         # registration confirmations
+  analytics: vercel
+  deployment: vercel
+
+recon_questions:
+  - "How many events per year?"
+  - "Is this a series with season standings, or independent events?"
+  - "How do people register? (online, email, external platform)"
+  - "Do you accept payments? How? (Stripe, Venmo, Zelle, cash)"
+  - "Do you need live scoring, brackets, or standings?"
+  - "Do you use any tournament management tools? (Rally HQ, Bracket HQ, etc.)"
+  - "Do you have event photos/media?"
+  - "What event details do people need? (rules, format, prizes, location)"
+  - "Do you have a recurring audience / community?"
+  - "Who will update event info after launch?"
+
+required_modules:
+  - cms-sanity
+  - analytics-vercel
+
+recommended_modules:
+  - email-resend
+  - contact-forms
+  - seo-structured-data
+
+optional_modules:
+  - payments-stripe     # only if selling registrations directly
+  - analytics-posthog
+
+integrations:
+  - name: "Rally HQ"
+    package: "@rallyhq/client"
+    condition: "if live scoring/brackets needed"
+    pattern: "Server-only client (rallyhq.server.ts) + client-safe type exports (rallyhq.ts)"
+
+sitemap:
+  - path: "/"
+    purpose: "Homepage — announcements banner, upcoming events, CTA"
+  - path: "/tournaments"
+    purpose: "All events listing (upcoming + past)"
+  - path: "/tournaments/[slug]"
+    purpose: "Event detail — date, location, rules, registration, results"
+  - path: "/standings"
+    purpose: "Season standings / leaderboard"
+    condition: "if series with points"
+  - path: "/rankings"
+    purpose: "Editorial power rankings"
+    condition: "if editorial content desired"
+  - path: "/blog"
+    purpose: "Blog / tournament recaps"
+  - path: "/blog/[slug]"
+    purpose: "Article detail"
+  - path: "/gallery"
+    purpose: "Photo gallery with event filtering"
+    condition: "if event media exists"
+  - path: "/about"
+    purpose: "Organization info"
+  - path: "/rules"
+    purpose: "Tournament rules documentation"
+  - path: "/contact"
+    purpose: "General inquiries, sponsorship requests"
+
+task_groups:
+  - name: "Project Setup"
+    tasks:
+      - "Scaffold SvelteKit 2 project"
+      - "Install Tailwind CSS 4, configure design tokens"
+      - "Link to Vercel project"
+      - "Set up Sanity project"
+
+  - name: "CMS & Schemas"
+    module: cms-sanity
+    tasks:
+      - "Define event schema (title, date, location, format, maxTeams, entryFee, registrationUrl, paymentMethods, prizes, rules, rallyHqSlug)"
+      - "Define announcement schema (message, type: info/warning/success, active)"
+      - "Define blog post schema"
+      - "Define gallery image schema (with event reference for filtering)"
+      - "Define siteSettings schema"
+      - "Configure Sanity Studio"
+      - "Seed sample events"
+
+  - name: "Core Pages"
+    tasks:
+      - "Build homepage with announcements banner + upcoming events"
+      - "Build /tournaments listing (upcoming sorted by date, past section)"
+      - "Build /tournaments/[slug] detail (all event info, registration CTA)"
+      - "Build /about page"
+      - "Build /rules page"
+      - "Build /contact page with form"
+
+  - name: "Rally HQ Integration"
+    condition: "if live scoring/brackets needed"
+    tasks:
+      - "Install @rallyhq/client"
+      - "Create rallyhq.server.ts (server-only client)"
+      - "Create rallyhq.ts (client-safe exports: types + URL helper)"
+      - "Wire tournament detail page to load Rally HQ data via +page.server.ts"
+      - "Build bracket/standings embed component"
+
+  - name: "Standings & Rankings"
+    condition: "if series with points"
+    tasks:
+      - "Define point system constants"
+      - "Build standings computation functions (getPlayerStats, getSeasonLeaderboard)"
+      - "Build /standings page with leaderboard table"
+      - "Build /rankings page with editorial content (optional)"
+
+  - name: "Gallery"
+    condition: "if event media exists"
+    tasks:
+      - "Define gallery image schema with event reference"
+      - "Build /gallery page with event filter"
+      - "Build image lightbox component"
+
+  - name: "Polish & Launch"
+    tasks:
+      - "Run brand-forge for brand identity"
+      - "Run signal-forge for site copy"
+      - "Run image-gen for hero image and OG card"
+      - "Install @vercel/analytics and @vercel/speed-insights"
+      - "Add structured data (Organization, Event schemas)"
+      - "Test mobile responsiveness"
+      - "Deploy preview → client review → deploy production"
+      - "Run claude-docs-toolkit for handoff docs"
+
+verification:
+  - "Events display from Sanity with correct date sorting"
+  - "Event detail shows all tournament info"
+  - "Rally HQ integration shows brackets/standings (if applicable)"
+  - "Announcements banner appears when active announcements exist"
+  - "Gallery filters by event"
+  - "Mobile responsive on all pages"
+  - "Client can add new events in Sanity Studio"
