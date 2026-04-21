@@ -70,6 +70,21 @@ Every screen must answer three questions in order:
 
 Design decisions are evaluated against this pipeline, not aesthetic preference. Refer to `standards/frontend/ux-conversion.md` for specific rules.
 
+## 8. Data Scale
+
+Dynamic surfaces — dashboards, feeds, admin panels, list views, coordination tools — hold at 10× and 100× content without redesign.
+
+Every such surface is audited against five heuristics:
+1. **Default-view logic** — newest/highest-signal first, never rank-by-type
+2. **Filter + sort affordances** — visible above the fold, not hidden in menus
+3. **Freshness contract** — documented rate-of-change with matching UI signal
+4. **Scale budget** — declared rendering ceiling (default: paginate at 50, virtualize at 500)
+5. **Server-side filter/sort** — client never receives rows it will not render
+
+Static UX audits (Nielsen, WCAG, gestalt, spacing) measure a surface at current content. They miss an entire class of failures that only manifest at volume. Data-scale is an IA concern, not an engineering concern. A surface that passes visual audit but fails scale walkthrough is not shipped.
+
+Refer to `standards/frontend/data-scale.md` for the full standard and `standards/backend/queries.md` + `standards/backend/api.md` for the pagination / filter-sort contract server-side.
+
 ---
 
 ## Applying These Principles
@@ -78,8 +93,8 @@ These principles inform SpecChain workflows at every stage:
 
 | Stage | Principles Applied |
 |-------|-------------------|
-| `/new-spec` | Scope minimization (right-size the spec), Conversion Architecture (ask about conversion goals) |
-| `/create-spec` | Behavioral contracts (verification criteria), Conversion Architecture (specify trust signals, CTAs, hierarchy) |
-| `/implement-spec` | Traceability (session logs), boundary validation |
-| Verification | Behavioral contracts, observability, Conversion Architecture (verify UX conversion compliance) |
+| `/new-spec` | Scope minimization (right-size the spec), Conversion Architecture (ask about conversion goals), Data Scale (ask whether the surface is dynamic) |
+| `/create-spec` | Behavioral contracts (verification criteria), Conversion Architecture (specify trust signals, CTAs, hierarchy), Data Scale (specify default-view, filter affordances, freshness contract, scale budget for any list view) |
+| `/implement-spec` | Traceability (session logs), boundary validation, Data Scale (cursor-based pagination, server-side filter/sort) |
+| Verification | Behavioral contracts, observability, Conversion Architecture (verify UX conversion compliance), Data Scale (volume walkthrough at 10× and 100× content) |
 | Standards | All — standards encode these principles as rules |
