@@ -195,12 +195,62 @@ Otherwise, extend an existing tool. Most new capabilities are sub-commands, not 
 
 ---
 
+## Pinned constraints vs creative latitude
+
+A generation prompt has two sections that must be marked explicitly:
+
+**PINNED CONSTRAINTS** — anything two engines must agree on. Tokens. Voice rules. Refused phrases. IA. Content map. Required visual moves with exact CSS/SVG values. Hard requirements (build green, no images, accessibility). The brand-fact whitelist for quantitative claims. The hero composition.
+
+**CREATIVE LATITUDE** — places where two engines making different choices is acceptable. Internal grid layouts within a readout-row. Bio tile rendering style. Case-study diagram topology details. Hover micro-interaction tuning. Section divider choices. Editorial-italic placement beyond the required single instance.
+
+The reason this distinction matters: a prompt that pins everything strips the execution engine of judgment and produces visually conservative output. A prompt that pins nothing produces inventions like "invented capacity numbers" that violate the brand's voice. The right prompt pins what must hold and explicitly hands the rest to the engine.
+
+**Rule of thumb**: a constraint is pinned if its violation would break brand voice, voice rules, IA, accessibility, or buyer trust. A constraint is latitude if its violation would only produce a different surface appearance with the same intent.
+
+## Multi-engine validation workflow
+
+Run the prompt through ≥2 execution engines. Compare outputs against the pinned constraints. Absorb cross-engine visual moves into the prompt for the next iteration.
+
+```
+Prompt v1
+  ├─ Fresh Claude Code session  → site-v2/
+  ├─ v0.dev                     → v0-output/
+  └─ Claude Design + briefs     → claude-design-output/
+                ↓
+   Compare against pinned constraints
+                ↓
+   Absorb cross-engine visual moves:
+     - Visual moves that emerged in 1 engine but match brand voice → pin into prompt
+     - Visual moves that emerged in 1 engine but violate voice → tighten anti-pattern
+     - Pinned constraints that diverged across engines → over-specify in prompt
+                ↓
+   Prompt v2 (tightened)
+                ↓
+   Re-run, measure divergence reduction
+```
+
+Sustainable workflow target: after 2–3 tournament rounds, the prompt should produce structurally and visually consistent output across all engines on its pinned constraints, with predictable surface variation in the creative-latitude areas. At that point, the prompt is portable and the execution engine becomes a deployment choice (which infrastructure ships fastest), not a quality choice (all engines pass).
+
+### Tournament insights from TNA's build
+
+The TNA prompt went through 2 rounds with three engines:
+
+| Engine | Round 1 (untightened) | Round 2 (tightened) |
+|---|---|---|
+| Claude Code (fresh session) | Build green, IA correct, voice clean, visually conservative. Surfaced: gradient direction, case-study viewBox, h2/h3 collision, padding asymmetry. | Build green, all R1 issues resolved. Surfaced: italic counting rule, monogram tile shape, edge-encoding interpretation. |
+| Claude Design + Gemini-generated prompt + briefs | Visually distinctive (intake panel, ◢ glyphs, line-through capability). Violated voice (invented capacity, slots, pricing bands). Wrong stack (React+Babel-CDN). Missing IA (3 of 8 pages). | (pending re-run by operator) |
+| v0.dev | (pending) | (pending) |
+
+The Claude Design output's visual moves (intake panel, ◢ glyph, line-through) were absorbed into prompt v3 as pinned constraints. The Claude Design output's invented data was used as a tightening signal — "no invented metrics" became an ERROR-level voice rule with a brand-fact whitelist.
+
+Cross-pollination is the architecture's actual value. No single engine produces the strongest output on the first try. The prompt evolves by absorbing the best moves from each engine while constraining out the engine-specific violations.
+
 ## Status of this architecture
 
 **Authored**: 2026-05-16, during the TNA agency build.
 
-**Driver**: the TNA site iteration loop exposed that the forge-family was being used as a hand-execution stack rather than a prompt-compilation stack. Once compiled into a single generation prompt (`wip/tna/brand/visual-identity/site-generation-prompt.md`), the same constraints that produced 30 iterations of hand-coded markup could produce a coherent site in one shot via any capable LLM.
+**Updated**: 2026-05-17, adding pinned-vs-latitude distinction and multi-engine validation workflow after Round 1 testing across Claude Code + Claude Design.
 
-**Validation pending**: feed `wip/tna/brand/visual-identity/site-generation-prompt.md` into Claude Code (fresh session) and v0.dev. Compare outputs for structural consistency. If consistent → architecture validated. If inconsistent → identify which constraints need tightening in the prompt template.
+**Driver**: the TNA site iteration loop exposed that the forge-family was being used as a hand-execution stack rather than a prompt-compilation stack. Once compiled into a single generation prompt, the same constraints that produced 30 iterations of hand-coded markup could produce a coherent site in one shot via any capable LLM. The round-2 multi-engine test then surfaced that the right architecture is not "one engine produces the site" but "the prompt + tournament across engines produces the site, with the prompt as the durable IP."
 
-**Next codification step**: extract the TNA-specific generation prompt into `templates/site-generation-prompt.md` as a generic scaffold with placeholder slots for future brand applications. (Done in the same commit as this doc.)
+**Validation status**: ROUND 2 — prompt tightened with intake-panel, brand-fact whitelist, ◢ glyph, line-through capability move, no-invented-data ERROR rule. Pending re-run across all three engines.
