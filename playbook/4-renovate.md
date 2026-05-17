@@ -1,5 +1,9 @@
 # Playbook Step 4: Renovate
 
+> **Updated 2026-05-16**: The corrected execution model is "compile the generation prompt from Stage 3.5's brief and run it through an execution engine (Claude Code, v0.dev, Claude artifacts, GPT-5)." Hand-iterating markup at this stage is the anti-pattern that produced the TNA site's 30-iteration correction loop. The brief is *prescription*; the prompt is *executable spec*; the engine is *commodity*. See `ARCHITECTURE.md` and `templates/site-generation-prompt.md`.
+>
+> Original prescriptive content below is being retired stage-by-stage as the prompt-compilation pattern proves out.
+
 ## Purpose
 
 Execute the build using agents and the forge family toolchain. This is the construction phase — agents scaffold, wire modules, generate content, and deploy.
