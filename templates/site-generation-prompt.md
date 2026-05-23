@@ -164,4 +164,4 @@ A future automation step could fill this template deterministically from a proje
 
 ## Example: TNA's filled prompt
 
-See `Signal-x-Studio-LLC/tna/brand/visual-identity/site-generation-prompt.md` for the first complete instance of this template, filled for the TNA agency build (May 2026).
+See `nino-chavez/tna/brand/visual-identity/site-generation-prompt.md` for the first complete instance of this template, filled for the TNA agency build (May 2026).
