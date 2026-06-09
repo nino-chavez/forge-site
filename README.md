@@ -4,7 +4,7 @@ A blueprint system for agent-driven client site builds. Codifies a repeatable "r
 
 ## What This Is
 
-forge-site is a **knowledge artifact**, not software. No runtime, no database, no CLI. It's structured documentation that humans and AI agents consume to build client sites from proven patterns.
+forge-site is a **knowledge artifact**. No runtime, no database, no build step — structured documentation that humans and AI agents consume to build client sites from proven patterns. The one helper script, `scripts/compile-prompt.mjs`, fills a generation prompt's mechanical slots from a brand-kit and gates filled prompts; everything else is read, not executed.
 
 Think Kitchen Nightmares, not Shopify. You walk into a client's situation, diagnose what they need, select from proven modules, and agents build it using patterns extracted from real shipped projects.
 
@@ -12,11 +12,12 @@ Think Kitchen Nightmares, not Shopify. You walk into a client's situation, diagn
 
 ```
 forge-site/
-├── archetypes/          # 4 business pattern definitions
+├── archetypes/          # 5 business pattern definitions (+ *.DESIGN.md design layer)
 │   ├── service-business.md
 │   ├── event-organizer.md
 │   ├── digital-content.md
-│   └── portfolio-brand.md
+│   ├── portfolio-brand.md
+│   └── publication.md
 │
 ├── modules/             # 12 proven integration patterns
 │   ├── payments-stripe.md
@@ -31,11 +32,17 @@ forge-site/
 │   ├── 4-renovate.md    # Agent execution workflow
 │   └── 5-handoff.md     # Client receives + operates
 │
-├── templates/           # Specchain-compatible spec templates
+├── templates/           # Spec templates + compiled-prompt scaffolds
 │   ├── service-business.yml
 │   ├── event-organizer.yml
 │   ├── digital-content.yml
-│   └── portfolio-brand.yml
+│   ├── portfolio-brand.yml
+│   ├── publication.yml
+│   ├── site-generation-prompt.md    # greenfield builds
+│   └── site-remediation-prompt.md   # fixing existing sites
+│
+├── scripts/
+│   └── compile-prompt.mjs  # fill prompt slots from brand-kit; gate filled prompts
 │
 └── specchain/           # Specchain config for forge-site itself
 ```
@@ -50,6 +57,7 @@ Extracted from real shipped projects in this workspace:
 | **Event Organizer** | Selling registrations, managing live events | Volley Rx, Let's Pepper, Rally HQ |
 | **Digital Content** | Selling access to videos, courses, downloads | Rally HQ (billing), Urvil Performance |
 | **Portfolio/Brand** | Personal or business brand with media focus | Photography, website-nc, FlickDay |
+| **Publication** | Free, ungated editorial publication under one voice | Signal Dispatch v1/v2 |
 
 ## The Forge Family
 

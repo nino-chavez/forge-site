@@ -1,6 +1,6 @@
 # forge-site
 
-Blueprint system for agent-driven client site builds. NOT software — no runtime, no CLI, no build step. This is structured documentation that humans and AI agents consume to deliver client sites from proven patterns.
+Blueprint system for agent-driven client site builds. Structured documentation that humans and AI agents consume to deliver client sites from proven patterns — no runtime, no build step. The single exception: `scripts/compile-prompt.mjs`, a dependency-free helper that fills a generation prompt's mechanical slots from a brand-kit and gates a filled prompt before it ships to an engine. Everything else is read, not executed.
 
 ## What This Is
 
@@ -32,11 +32,14 @@ forge-site codifies a repeatable "renovation" process for building client websit
 
 ```
 forge-site/
-├── archetypes/           # 4 business pattern definitions (with real project references)
+├── archetypes/           # 5 business pattern definitions (with real project references)
 │   ├── service-business.md    — Allen Wellness Center, Creative Floors
 │   ├── event-organizer.md     — Volley Rx, Let's Pepper, Rally HQ
 │   ├── digital-content.md     — Rally HQ (billing), Urvil Performance
-│   └── portfolio-brand.md     — Photography, website-nc, FlickDay
+│   ├── portfolio-brand.md     — Photography, website-nc, FlickDay
+│   ├── publication.md         — Signal Dispatch v1/v2
+│   └── *.DESIGN.md            — per-archetype design system / engineering layer
+│                                (each carries a Pinned vs Latitude section)
 │
 ├── modules/              # 12 proven integration patterns
 │   ├── payments-stripe.md     — checkout, subscriptions, 12 webhook handlers
@@ -59,16 +62,22 @@ forge-site/
 │   ├── 4-renovate.md     — agent execution workflow + forge family CLI commands
 │   └── 5-handoff.md      — what client receives, training checklist
 │
-├── templates/            # Specchain-compatible spec templates per archetype
+├── templates/            # Spec templates per archetype + compiled-prompt scaffolds
 │   ├── digital-content.yml
 │   ├── service-business.yml
 │   ├── event-organizer.yml
-│   └── portfolio-brand.yml
+│   ├── portfolio-brand.yml
+│   ├── publication.yml
+│   ├── site-generation-prompt.md   — greenfield compiled-prompt scaffold
+│   └── site-remediation-prompt.md  — corrective compiled-prompt scaffold (existing sites)
+│
+├── scripts/
+│   └── compile-prompt.mjs    # fill mechanical slots from brand-kit.json; gate filled prompts
 │
 └── specchain/            # Specchain config + specs for forge-site itself
 ```
 
-## Four Archetypes
+## Five Archetypes
 
 | Archetype | Description | Reference Projects |
 |-----------|-------------|-------------------|
@@ -76,6 +85,7 @@ forge-site/
 | **Event Organizer** | Selling registrations, managing live events | Volley Rx, Let's Pepper, Rally HQ |
 | **Digital Content** | Selling access to videos, courses, downloads | Rally HQ (billing), Urvil Performance |
 | **Portfolio/Brand** | Personal or business brand with media focus | Photography, website-nc, FlickDay |
+| **Publication** | Free, ungated editorial publication under one voice | Signal Dispatch v1/v2 |
 
 Each archetype has two variants (e.g., service-business has person-centric and project-centric). Read the archetype doc for variant details.
 
@@ -107,5 +117,7 @@ forge-site has been validated against these completed projects:
 - Archetype docs reference real file paths in `~/Workspace/dev/` — verify paths still exist before recommending
 - Module docs include specific integration patterns and gotchas, not generic advice
 - The playbook is process documentation, not code — read it, don't execute it
-- Templates are YAML files designed for specchain consumption
+- Templates: `*.yml` for specchain consumption; `site-*-prompt.md` are compiled-prompt scaffolds (generation for greenfield, remediation for existing sites — see the fork in `playbook/4-renovate.md`)
+- Structural anti-fabrication (see `ARCHITECTURE.md`): constraints that an engine could violate plausibly need a mechanism (whitelist, manifest, executable check), not another instruction sentence
+- Before handing a filled generation prompt to an engine: `node scripts/compile-prompt.mjs check <prompt.md>`
 - forge-site improves with each validation run — patch gaps when found
