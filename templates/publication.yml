@@ -1,0 +1,137 @@
+# Publication archetype template
+# Filled-in instance: ~/Workspace/dev/apps/blog/ (Signal Dispatch v1 + v2 Blueprint)
+
+archetype: publication
+description: >
+  Editorial publication site. Curated body of writing under a single voice.
+  Free, ungated, no email capture. Multi-format (posts, whitepapers, series,
+  counterpoints). Reading column is the surface; discovery is subordinate.
+
+# Brand kit consumed from forge-brand output.
+# Generate first: cd ~/Workspace/dev/tools/forge-brand && \
+#   npx tsx src/cli/index.ts init --from-exploration <blueprint-dir>
+brand_kit_path: ./brand-kit.json
+
+stack:
+  framework: astro  # or sveltekit
+  content_source: content-collections  # mdx in src/content/<collection>/
+  cms: null  # or 'sanity' if non-dev also authors
+  image_cdn: cloudflare-images
+  styling: tailwindcss-4
+  search: pagefind  # static full-text
+  analytics: cloudflare-analytics  # NOT google-analytics
+  rss: required-full-and-summary
+  deployment: cloudflare-pages  # or vercel
+
+content_collections:
+  - id: blog
+    label: Posts
+    primary: true
+    sort: chronological-desc
+  - id: whitepaper
+    label: Whitepapers
+    long_form: true
+    requires_toc: true
+  - id: series
+    label: Series
+    ordered: true
+    requires_index: true
+  - id: counterpoint
+    label: Counterpoints
+    binds_to: blog  # via challengesPost frontmatter
+    purpose: self-red-team
+
+# Optional collections per project disposition (Signal Dispatch examples)
+optional_collections:
+  - id: presentations
+    label: Presentations
+    archive_if_dormant_in_year: 2026
+  - id: fiction
+    label: Fiction
+    disposition: open  # keep / spin-off-site / archive
+  - id: tutorials
+    label: Tutorials
+    archive_if_dormant_in_year: 2026
+
+surfaces:
+  home:
+    role: discovery-surface
+    primary_affordance: featured-piece-OR-current-dispatch
+    rule_4_compliant: true  # one thing, not three
+  post_detail:
+    role: the-read
+    reading_column_max_px: 720
+    footer_next_step_count: 1
+  whitepaper_detail:
+    role: the-receipts
+    requires:
+      - executive-summary-block
+      - persistent-toc-leftrail
+      - section-progress-indicator
+      - inline-footnotes-with-marginal-expansion
+  series_detail:
+    role: threaded-reading
+    requires:
+      - ordered-numbered-parts-list
+      - read-state-indicators
+      - continue-or-start-affordance
+      - timeline-rightrail
+  counterpoint_detail:
+    role: stress-test
+    requires:
+      - parent-post-banner
+      - return-to-parent-affordance
+    forbids:
+      - related-posts
+      - email-signup
+  library:
+    role: discovery
+    primary_axis: chronological
+    secondary_axes: [format-filter, tag-filter]
+    rule_4_compliant: true
+  about_colophon:
+    role: positioning-proof
+    requires:
+      - editorial-single-sentence-at-top  # D2
+      - author-block-below-editorial-sentence  # Rule 3
+      - colophon-stack-table
+  subscribe_follow:
+    role: minimal-follow-affordances
+    affordances: [rss-instructions, linkedin-link]
+    forbids: [email-field, newsletter-signup, social-proof-bar]
+
+flows:
+  cold_arrival_peer_architect:
+    pages: [post-detail, series-detail, subscribe-follow]
+  cold_arrival_hiring_evaluator:
+    pages: [post-detail, counterpoint-detail, post-detail, about-colophon]
+  warm_return_rss:
+    pages: [post-detail, library]
+
+rules:
+  - id: rule-1-brand-register
+    text: "Only use visual + editorial elements consistent with the brand kit"
+  - id: rule-2-reader-terminology
+    text: "Reader-facing labels match persona language, not internal CMS terms"
+  - id: rule-3-work-first
+    text: "Work first, author second, brand third (above the fold on every surface)"
+  - id: rule-4-one-thing
+    text: "One primary affordance per surface; subordinate others"
+  - id: rule-5-progressive-disclosure
+    text: "Long-form opens with self-contained Executive Summary + TOC"
+
+anti_patterns:
+  - email-capture-anywhere
+  - social-proof-bars
+  - popup-modals
+  - "you must / best practice is" prescriptive copy
+  - third-party tracking (google analytics, hotjar)
+  - cards-where-dense-rows-would-do
+  - reading-column-wider-than-720px
+
+required_artifacts_before_build:
+  - brand-kit.json (from forge-brand)
+  - signal-forge-bridge (from forge-brand export signal-forge)
+  - image-gen-bridge (from forge-brand export image-gen)
+  - generated copy per surface (from forge-signal)
+  - generated hero/social/og assets per surface (from gen-images)
