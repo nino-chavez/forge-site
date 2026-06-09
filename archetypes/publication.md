@@ -51,10 +51,15 @@ Differs from portfolio-brand in that the work being shown IS the writing (not ph
 ## Required Modules
 
 - `seo-structured-data` — every post needs Article schema, every author needs Person schema
-- `rss-feeds` — full + summary
-- `analytics-cloudflare` (or comparable privacy-respecting analytics)
+
+**Required patterns not yet extracted to `modules/`** (implement from the reference projects; extract a module doc on second use):
+
+- `rss-feeds` — full + summary variants. Reference: Signal Dispatch v1 (`~/Workspace/dev/apps/blog/astro-build/`)
+- `analytics-cloudflare` (or comparable privacy-respecting analytics) — reference: same
 
 ## Recommended Modules
+
+None of these have `modules/` docs yet — same not-yet-extracted status as above:
 
 - `search-pagefind` — static full-text search if corpus > 50 posts
 - `image-cloudflare` — if heavy media

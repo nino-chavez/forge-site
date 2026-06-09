@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Match the client to an archetype and identify which modules they need. This is pattern recognition — the client's situation maps to one of four proven business patterns.
+Match the client to an archetype and identify which modules they need. This is pattern recognition — the client's situation maps to one of five proven business patterns.
 
 ## Decision Tree
 
@@ -10,9 +10,12 @@ Match the client to an archetype and identify which modules they need. This is p
 Does the business sell access to digital content?
   ├── YES → Do they need subscriptions or gated access?
   │   ├── YES → DIGITAL CONTENT archetype
-  │   └── NO → Is it a portfolio showcasing their work?
-  │       ├── YES → PORTFOLIO/BRAND archetype
-  │       └── NO → Reassess — may be SERVICE BUSINESS with downloadable resources
+  │   └── NO → Is the writing itself the product (curated body of work,
+  │       │    free and ungated, one editorial voice)?
+  │       ├── YES → PUBLICATION archetype
+  │       └── NO → Is it a portfolio showcasing their work?
+  │           ├── YES → PORTFOLIO/BRAND archetype
+  │           └── NO → Reassess — may be SERVICE BUSINESS with downloadable resources
   │
   └── NO → Does the business run events?
       ├── YES → Do they need registration, scoring, or brackets?
@@ -36,9 +39,10 @@ Does the business sell access to digital content?
 | "I run tournaments/events/meetups" | Event Organizer | High |
 | "I want to sell access to my videos/courses" | Digital Content | High |
 | "I need a portfolio/personal site" | Portfolio/Brand | High |
+| "I publish essays/whitepapers under my own voice, free, no email list" | Publication | High |
 | "I want to sell products online" | None — refer to Shopify/existing platforms | N/A |
 | "I need a booking system" | Service Business + booking-calcom module | Medium |
-| "I want to start a blog" | Portfolio/Brand or content marketing add-on | Low |
+| "I want to start a blog" | Publication (if the writing is the product) or Portfolio/Brand content add-on | Low |
 
 ## Handling Hybrids
 

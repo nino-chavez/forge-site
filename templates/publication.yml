@@ -124,7 +124,7 @@ anti_patterns:
   - email-capture-anywhere
   - social-proof-bars
   - popup-modals
-  - "you must / best practice is" prescriptive copy
+  - '"you must / best practice is" prescriptive copy'
   - third-party tracking (google analytics, hotjar)
   - cards-where-dense-rows-would-do
   - reading-column-wider-than-720px
