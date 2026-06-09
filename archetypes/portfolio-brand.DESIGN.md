@@ -200,6 +200,16 @@ Portfolio sites live on their image grid:
 - Let UI chrome (header, buttons, cards) compete with the work. The chrome must recede.
 - Use gradient text, glow effects, or decorative backgrounds. The work provides the visual; the system provides the frame.
 
+## Pinned vs Latitude (prompt compilation)
+
+When this archetype is compiled into a generation prompt (see `templates/site-generation-prompt.md`), classify its values as:
+
+**Pinned** — token values (after per-client overrides land), single accent, accent ≤ 3 uses per viewport, chrome-recedes rule, no gradient text/glow/decorative backgrounds, tracking restriction, the Do/Don't lists, token-reference-only CSS.
+
+**Latitude** — gallery/masonry grid internals, image hover-reveal tuning, caption placement style, lightbox transition details, about-page composition.
+
+**Per-client override (resolved before compilation, then pinned)** — accent color derived from the work itself (the dominant tone of the portfolio). An override is a kickoff decision, not engine latitude.
+
 ---
 
 *Reference archetype: `portfolio-brand`. Sibling docs: `archetypes/portfolio-brand.md`.*

@@ -180,6 +180,16 @@ No continuous animation (marquees, parallax, looped particles). Registration is 
 - Use light-background heroes. Action photography needs dark overlay for text legibility.
 - Let countdowns tick on proportional fonts.
 
+## Pinned vs Latitude (prompt compilation)
+
+When this archetype is compiled into a generation prompt (see `templates/site-generation-prompt.md`), classify its values as:
+
+**Pinned** — token values (after per-client overrides land), dark-overlay hero rule, one registration affordance per viewport, accent-for-urgency-only, monospace countdown digits, header date/countdown presence, the Do/Don't lists, token-reference-only CSS.
+
+**Latitude** — event-card grid internals, schedule/bracket table styling details, photo gallery layout, hover treatments, countdown container composition (digits rule stays pinned).
+
+**Per-client override (resolved before compilation, then pinned)** — brand colors from event/league collateral. An override is a kickoff decision, not engine latitude.
+
 ---
 
 *Reference archetype: `event-organizer`. Sibling docs: `archetypes/event-organizer.md`.*

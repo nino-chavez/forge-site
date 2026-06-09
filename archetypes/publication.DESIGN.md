@@ -90,3 +90,11 @@ PR cannot merge to main unless:
 6. Preview URL screenshot uploaded to PR for human visual review
 
 Production deploys are gated on the above plus a tag-based release flow (semver), not push-to-main. Preview deploys auto-deploy on every PR.
+
+## Pinned vs Latitude (prompt compilation)
+
+When this archetype is compiled into a generation prompt (see `templates/site-generation-prompt.md`), this entire engineering layer compiles into the prompt's acceptance checks — gates are pinned by definition (Lighthouse budgets, voice gate, no-email-field assertion, reading-column width guard, RSS/sitemap validity, page weight < 200KB).
+
+**Latitude** — test file organization, choice of feed-validator library, Playwright fixture structure, visual-regression snapshot naming. Implementation shape is the executor's; thresholds and assertions are not.
+
+**Per-publication override (resolved before compilation, then pinned)** — analytics provider (within the privacy-respecting constraint), image CDN, deployment target.

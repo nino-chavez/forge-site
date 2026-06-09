@@ -188,6 +188,16 @@ Code is always dark, always mono, always at `{typography.scale.code}`. Use `{col
 - Add sidebars, related-posts rails, or content recommendation widgets to the prose column. Put them below the article, not beside it.
 - Use `{typography.fonts.mono}` for pull quotes or anything other than code and inline keyboard shortcuts.
 
+## Pinned vs Latitude (prompt compilation)
+
+When this archetype is compiled into a generation prompt (see `templates/site-generation-prompt.md`), classify its values as:
+
+**Pinned** — token values (after per-client overrides land), 18px body default, prose column purity (no rails beside the article), hero display ≤ 3rem, serif/sans pairing rule, mono-for-code-only, the Do/Don't lists, token-reference-only CSS.
+
+**Latitude** — below-article rail composition, content-card grid internals, pricing-table styling details, hover treatments, progress-indicator styling.
+
+**Per-client override (resolved before compilation, then pinned)** — brand colors and the specific serif/sans pairing chosen at kickoff. An override is a kickoff decision, not engine latitude.
+
 ---
 
 *Reference archetype: `digital-content`. Sibling docs: `archetypes/digital-content.md`.*

@@ -164,6 +164,16 @@ Phone numbers in the header are `{typography.scale.lead}` size, not hidden in a 
 - Use `{typography.fonts.mono}` for body copy or headings.
 - Let any tappable element fall below `{layout.touchTargetMin}`.
 
+## Pinned vs Latitude (prompt compilation)
+
+When this archetype is compiled into a generation prompt (see `templates/site-generation-prompt.md`), classify its values as:
+
+**Pinned** — token values (after per-client overrides land), the single-accent rule, 1.6 body line-height, content max 44rem, touch-target minimum, header phone visibility, one-primary-CTA-per-viewport, the Do/Don't lists, token-reference-only CSS.
+
+**Latitude** — credential chip arrangement within a team card, testimonial card internals, service-card grid breakpoints, hover treatment on cards, section divider choices, footer composition.
+
+**Per-client override (resolved before compilation, then pinned)** — `colors.primary` derived from client collateral. An override is a kickoff decision, not engine latitude.
+
 ---
 
 *Reference archetype: `service-business`. Sibling docs: `archetypes/service-business.md` (archetype playbook).*
