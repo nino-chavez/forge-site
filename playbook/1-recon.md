@@ -91,12 +91,21 @@ If the client has a current website, audit it before the conversation:
 - [ ] Are CTAs visible without scrolling?
 - [ ] Is there a clear next step on every page?
 
+### Evidence Discipline (non-negotiable for audit findings)
+
+Audit output feeds the remediation prompt (`templates/site-remediation-prompt.md`) — a finding that violates these rules either compiles into a phantom fix or gets cut at compilation. Record each finding as `id · evidence · impact · recommendation`, where:
+
+- **Findings are unresolved problems only.** Things the site does well go in a separate `passed_checks` list, never in findings. A positive observation recorded as a finding inflates the problem count and pollutes the remediation prompt.
+- **The evidence field contains only what you observed** — values, quoted text, URLs, screenshot names, Lighthouse numbers. Recommendations live exclusively in the recommendation field. "Hero takes 4.2s LCP on mobile (Lighthouse, 2026-06-09)" is evidence; "hero should be optimized" is not.
+- **Gaps are recorded, never extrapolated.** Anything you could not actually check (page behind auth, tool unavailable, page didn't load) goes in a `not_assessed` list with the reason. Never write a finding about a page you didn't see render — a 404 you screenshotted is evidence of a 404, not of the page behind it.
+- **Attribute measurements to the page measured.** Homepage Lighthouse numbers describe the homepage; never present them as "the site's" or another page's performance.
+
 ## Output
 
 After recon, you should have:
 1. A clear understanding of the business and its customers
 2. A preliminary archetype match (to be confirmed in Diagnose)
-3. A list of what's broken and what's working
+3. Audit findings + passed checks + not-assessed gaps, per the evidence discipline above
 4. An inventory of existing assets (content, accounts, domain)
 5. The client's definition of success
 

@@ -8,6 +8,19 @@
 
 Execute the build using agents and the forge family toolchain. This is the construction phase — agents scaffold, wire modules, generate content, and deploy.
 
+## The fork: generate or remediate
+
+Two compiled-prompt paths exist at this stage. Pick by what recon found:
+
+| Path | When | Template |
+|---|---|---|
+| **Generate** | No existing site, or the existing site isn't worth keeping (wrong platform, unsalvageable IA, rebuild is cheaper) | `templates/site-generation-prompt.md` |
+| **Remediate** | The existing site/codebase has a sound core and recon produced concrete findings against it | `templates/site-remediation-prompt.md` |
+
+The remediation path compiles recon's findings (which follow the evidence discipline in `playbook/1-recon.md`) into a dependency-ordered fix spec: repo state pinned to a commit, verbatim edits with per-task acceptance checks, one commit per phase, explicit deferred list. A fresh session executes it at the client repo's root. Do not hand-fix an existing site interactively for the same reason you don't hand-iterate a greenfield build — compile the prompt, run it.
+
+Both paths can apply to one engagement (e.g. remediate the storefront, generate a new marketing site) — compile two prompts, never one hybrid.
+
 ## Execution Order
 
 ```
