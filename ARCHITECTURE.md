@@ -17,6 +17,7 @@
                               ▼
               [ Prompt artifact — the canonical output ]
                   site-generation-prompt.md
+                  site-remediation-prompt.md   (corrective — existing sites)
                   app-generation-prompt.md
                   deck-generation-prompt.md
                   doc-generation-prompt.md
@@ -207,6 +208,22 @@ The reason this distinction matters: a prompt that pins everything strips the ex
 
 **Rule of thumb**: a constraint is pinned if its violation would break brand voice, voice rules, IA, accessibility, or buyer trust. A constraint is latitude if its violation would only produce a different surface appearance with the same intent.
 
+Remediation prompts (`templates/site-remediation-prompt.md`) apply the same distinction with the default flipped: ~95% pinned (verbatim edits, exact anchors), latitude only where executor divergence is harmless.
+
+## Structural anti-fabrication
+
+The principle behind several otherwise-unrelated mechanisms: **fabrication is closed by contracts, never by exhortation.** Telling an engine "don't invent data" does not work — the TNA round-1 Claude Design output invented capacity numbers, slots, and pricing bands while operating under voice rules that forbade exactly that. What works is making fabrication mechanically detectable or impossible:
+
+| Mechanism | Where | What it closes |
+|---|---|---|
+| Brand-fact whitelist | generation prompt template | Quantitative claims must trace to a whitelisted fact; empty whitelist = no numbers permitted |
+| Generation manifest | generation prompt template | Every content slot's disposition (verbatim / adapted / omitted) and every claim's source recorded by the engine itself |
+| STOP-on-drift | both prompt templates | An executor that can't apply a pinned value reports instead of improvising a plausible substitute |
+| Acceptance checks | both prompt templates | Done = commands passed, not engine self-attestation |
+| Evidence discipline | playbook 1-recon | Audit findings carry observations, not advice; gaps are recorded as not-assessed, never extrapolated |
+
+When adding a new constraint anywhere in the family, apply the test: if an engine violating it would produce *plausible-looking* output, the constraint needs a structural mechanism (whitelist, manifest entry, executable check), not another sentence of instruction.
+
 ## Multi-engine validation workflow
 
 Run the prompt through ≥2 execution engines. Compare outputs against the pinned constraints. Absorb cross-engine visual moves into the prompt for the next iteration.
@@ -229,6 +246,30 @@ Prompt v1
    Re-run, measure divergence reduction
 ```
 
+### Tournament scorecard (the record format for "compare against pinned constraints")
+
+The compare step produces a scorecard, not impressions — one row per pinned constraint, one column per engine. Without this record, round-over-round divergence reduction can't actually be measured:
+
+```markdown
+# Tournament Scorecard — {prompt} vN, round R
+
+| Pinned constraint | Engine A | Engine B | Engine C | Action |
+|---|---|---|---|---|
+| (one row per [PINNED] item)| pass / FAIL: what diverged, quoted | … | … | tighten / absorb / none |
+
+Inputs: each engine's GENERATION_MANIFEST.md (pages, dispositions, claims,
+latitude choices, drift reports) — fall back to raw-output inspection only
+where the manifest is silent.
+
+Round metric: count of FAIL cells. Target: monotonically decreasing per
+round; portable when FAIL count = 0 across all engines.
+
+## Latitude observations (not scored)
+| Area | Engine A | Engine B | Engine C | Absorb into pinned? |
+```
+
+Actions feed the next prompt version: `tighten` = a pinned constraint diverged, over-specify it; `absorb` = a latitude choice from one engine is strong enough to pin; `none` = acceptable variation.
+
 Sustainable workflow target: after 2–3 tournament rounds, the prompt should produce structurally and visually consistent output across all engines on its pinned constraints, with predictable surface variation in the creative-latitude areas. At that point, the prompt is portable and the execution engine becomes a deployment choice (which infrastructure ships fastest), not a quality choice (all engines pass).
 
 ### Tournament insights from TNA's build
@@ -250,6 +291,8 @@ Cross-pollination is the architecture's actual value. No single engine produces 
 **Authored**: 2026-05-16, during the TNA agency build.
 
 **Updated**: 2026-05-17, adding pinned-vs-latitude distinction and multi-engine validation workflow after Round 1 testing across Claude Code + Claude Design.
+
+**Updated**: 2026-06-09, absorbing patterns from the site-auditor remediation review: remediation prompt type, structural anti-fabrication principle, tournament scorecard format, acceptance checks + generation manifest in the generation template.
 
 **Driver**: the TNA site iteration loop exposed that the forge-family was being used as a hand-execution stack rather than a prompt-compilation stack. Once compiled into a single generation prompt, the same constraints that produced 30 iterations of hand-coded markup could produce a coherent site in one shot via any capable LLM. The round-2 multi-engine test then surfaced that the right architecture is not "one engine produces the site" but "the prompt + tournament across engines produces the site, with the prompt as the durable IP."
 
