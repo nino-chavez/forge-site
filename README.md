@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/readme/hero.svg" width="100%" alt="Forge Site matches a real client situation to reusable archetypes, modules, and a five-step delivery playbook.">
+</p>
+
 # forge-site
 
 A blueprint system for agent-driven client site builds. Codifies a repeatable "renovation" process — from discovery through deployed handoff — using proven archetypes, battle-tested modules, and the forge family toolchain.
