@@ -1,0 +1,93 @@
+schema: work-library-publication/0
+case_id: forge-site
+adapter: git-manifest
+canonical_output: library-role
+
+catalog:
+  title: Forge Site
+  subtitle: Agent-assisted site delivery · Method reference
+  question: What should Work Library reuse from the site-delivery playbook without giving it publication authority?
+  summary: Reuse the discovery, archetype, module, build, and handoff practices for judged surfaces. Keep source selection, lifecycle, clearance, routes, and access inside Work Library.
+
+collection_candidates: [commerce, methods, delivery]
+
+publication:
+  status: draft
+  clearance: internal
+  assurance:
+    human_validation: pending
+
+outputs:
+  - id: library-role
+    type: decision-record
+    status: draft
+    artifact: docs/work-library-record.md
+    clearance: internal
+    assurance:
+      human_validation: pending
+  - id: source-overview
+    type: reference-document
+    status: ready
+    artifact: README.md
+    clearance: internal
+    assurance:
+      human_validation: pending
+  - id: delivery-playbook
+    type: reference-library
+    status: ready
+    artifact: playbook/
+    clearance: internal
+    assurance:
+      human_validation: pending
+
+projections:
+  - id: decision
+    output: library-role
+    artifact: docs/work-library-record.md
+    render_as: executive-decision
+    label: Work Library role
+    route: /
+  - id: source-overview
+    output: source-overview
+    artifact: README.md
+    render_as: reference-document
+    label: Source overview
+    route: /reference/source
+  - id: recon
+    output: delivery-playbook
+    artifact: playbook/1-recon.md
+    render_as: reference-document
+    label: Recon
+    route: /reference/playbook/recon
+  - id: diagnose
+    output: delivery-playbook
+    artifact: playbook/2-diagnose.md
+    render_as: reference-document
+    label: Diagnose
+    route: /reference/playbook/diagnose
+  - id: prescribe
+    output: delivery-playbook
+    artifact: playbook/3-prescribe.md
+    render_as: reference-document
+    label: Prescribe
+    route: /reference/playbook/prescribe
+  - id: renovate
+    output: delivery-playbook
+    artifact: playbook/4-renovate.md
+    render_as: reference-document
+    label: Renovate
+    route: /reference/playbook/renovate
+  - id: handoff
+    output: delivery-playbook
+    artifact: playbook/5-handoff.md
+    render_as: reference-document
+    label: Handoff
+    route: /reference/playbook/handoff
+
+exclude:
+  - assets/**
+  - archetypes/**
+  - modules/**
+  - scripts/**
+  - templates/**
+  - "**/.git/**"
