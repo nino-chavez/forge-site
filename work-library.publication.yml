@@ -44,43 +44,50 @@ projections:
   - id: decision
     output: library-role
     artifact: docs/work-library-record.md
-    render_as: executive-decision
+    render_as: markdown-document
+    kind: brief
     label: Work Library role
     route: /
   - id: source-overview
     output: source-overview
     artifact: README.md
-    render_as: reference-document
+    render_as: markdown-document
+    kind: reference
     label: Source overview
     route: /reference/source
   - id: recon
     output: delivery-playbook
     artifact: playbook/1-recon.md
-    render_as: reference-document
+    render_as: markdown-document
+    kind: method
     label: Recon
     route: /reference/playbook/recon
   - id: diagnose
     output: delivery-playbook
     artifact: playbook/2-diagnose.md
-    render_as: reference-document
+    render_as: markdown-document
+    kind: method
     label: Diagnose
     route: /reference/playbook/diagnose
   - id: prescribe
     output: delivery-playbook
     artifact: playbook/3-prescribe.md
-    render_as: reference-document
+    render_as: markdown-document
+    kind: method
     label: Prescribe
     route: /reference/playbook/prescribe
   - id: renovate
     output: delivery-playbook
     artifact: playbook/4-renovate.md
-    render_as: reference-document
+    render_as: markdown-document
+    kind: method
     label: Renovate
     route: /reference/playbook/renovate
   - id: handoff
     output: delivery-playbook
     artifact: playbook/5-handoff.md
-    render_as: reference-document
+    render_as: markdown-document
+    kind: method
     label: Handoff
     route: /reference/playbook/handoff
 
